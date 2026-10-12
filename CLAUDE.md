@@ -30,11 +30,12 @@ Metrics the site is expected to show in the future:
 
 ## Current Phase
 
-**Phase 1 — First local website version (design review).**
+**Phase 1 — First website version deployed (empty states, awaiting data).**
 
-- A first local version of the dashboard exists (`index.html`, `css/`, `js/`, `data/`, `assets/`). It shows empty states only; no measurement data exists yet.
+- The first version of the dashboard (`index.html`, `css/`, `js/`, `data/`, `assets/`) was approved by the user and committed. It shows empty states only; no measurement data exists yet.
 - Git is connected: branch `main`, remote `origin` = https://github.com/taeuk97/starlink-measurement.git.
-- The site is **not deployed** (no GitHub Pages yet). The website files are not committed until the user approves the design.
+- **GitHub Pages:** live at https://taeuk97.github.io/starlink-measurement/ — source "Deploy from a branch", `main` / `(root)`, built by GitHub's default "pages build and deployment" workflow (first deployed 2026-10-12). Every push to `main` redeploys the public site.
+- `.claude/settings.local.json` is machine-local and must not be committed.
 - Local preview: `.claude/launch.json` config `static-site` (`python -m http.server 8000`).
 - Do not commit, push, or deploy unless the user explicitly asks.
 
