@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "status": "no_data",
+  "status_message": "No measurements yet.",
+  "location": "KAIST, Daejeon, South Korea",
+  "measured_at": null,
+  "rtt_ms": null,
+  "download_mbps": null,
+  "upload_mbps": null,
+  "packet_loss_pct": null
+}

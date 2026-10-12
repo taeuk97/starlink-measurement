@@ -30,11 +30,13 @@ Metrics the site is expected to show in the future:
 
 ## Current Phase
 
-**Phase 0 — Agent/environment setup only.**
+**Phase 1 — First local website version (design review).**
 
-- No website code has been written yet.
-- No Git repository, GitHub remote, or GitHub Pages deployment exists yet.
-- Do not run `git init`, create a GitHub repo, push, or deploy unless the user explicitly asks.
+- A first local version of the dashboard exists (`index.html`, `css/`, `js/`, `data/`, `assets/`). It shows empty states only; no measurement data exists yet.
+- Git is connected: branch `main`, remote `origin` = https://github.com/taeuk97/starlink-measurement.git.
+- The site is **not deployed** (no GitHub Pages yet). The website files are not committed until the user approves the design.
+- Local preview: `.claude/launch.json` config `static-site` (`python -m http.server 8000`).
+- Do not commit, push, or deploy unless the user explicitly asks.
 
 ## Development Principles
 
@@ -72,3 +74,45 @@ This is a guideline, not yet created. Adjust with the user when work starts.
 4. Do not add features outside the current phase scope without asking.
 5. Git/GitHub/GitHub Pages: only when the user explicitly requests it. When it happens, record the repo URL and deployment details in this file.
 6. Keep this file up to date when the phase, data format, or structure changes.
+
+## Data Contract (draft)
+
+> Draft, not final. Agree on it with the user before any measurement pipeline writes these files.
+
+The site reads two static JSON files with relative paths. If a file is missing, cannot be fetched (e.g. when the page is opened via `file://`), is invalid, or has `null` values, the site shows its empty states. Files in `data/` must contain **real measurements only**. The placeholder files ship with `null`s and empty arrays and contain no numbers.
+
+General rules:
+- Timestamps are ISO 8601 in UTC with a `Z` suffix, e.g. `2026-10-12T14:00:00Z`. The UI displays them in KST and UTC.
+- Units are encoded in the field name: `_ms` = milliseconds, `_mbps` = megabits per second, `_pct` = percent (0–100).
+- A metric that was not measured is `null`. Never use `0` for "no data".
+- `schema_version` is an integer, currently `1`.
+
+### `data/latest.json` — most recent measurement
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `schema_version` | int | `1` |
+| `status` | string | `"no_data"` \| `"ok"` \| `"error"` |
+| `status_message` | string \| null | Short human-readable note (shown when `status` is `"error"`) |
+| `location` | string | `"KAIST, Daejeon, South Korea"` |
+| `measured_at` | string \| null | UTC time of the measurement. If `null`, all values are treated as missing |
+| `rtt_ms` | number \| null | Latency (round-trip time), ms |
+| `download_mbps` | number \| null | Download throughput, Mbps |
+| `upload_mbps` | number \| null | Upload throughput, Mbps |
+| `packet_loss_pct` | number \| null | Packet loss, % |
+
+The UI marks data as "may be outdated" when `measured_at` is older than 3 hours (`STALE_AFTER_HOURS` in `js/app.js`).
+
+### `data/history.json` — time series
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `schema_version` | int | `1` |
+| `status` | string | `"no_data"` \| `"ok"` |
+| `location` | string | `"KAIST, Daejeon, South Korea"` |
+| `generated_at` | string \| null | UTC time the file was written |
+| `points` | array | Measurements, any order (the UI sorts by `t`) |
+
+Each item in `points` has `t` (UTC timestamp, required) and the same metric fields as `latest.json`: `rtt_ms`, `download_mbps`, `upload_mbps`, `packet_loss_pct`. Any of these may be `null`. The range selector filters `points` to the last 24 hours, 7 days, or 30 days.
+
+Open questions: measurement interval, retention (how many days `history.json` keeps), the test server and method behind each metric, and whether to split history into per-range files if the file grows too large.

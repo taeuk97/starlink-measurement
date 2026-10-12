@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KAIST–ACAI Starlink Monitor</title>
+  <meta name="description" content="Starlink internet performance (latency, throughput, packet loss) measured at a single site at KAIST, Daejeon, South Korea.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <h1 class="brand-title">KAIST–ACAI Starlink Monitor</h1>
+        <p class="brand-subtitle">Starlink Internet Performance Monitoring at KAIST</p>
+      </div>
+      <nav class="site-nav" aria-label="Sections">
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#history">History</a></li>
+          <li><a href="#setup">Setup</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Location notice: one measurement point, not global Starlink performance -->
+    <div class="container">
+      <p class="location-notice">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>
+          <strong>Measurements collected exclusively at KAIST, Daejeon, South Korea.</strong>
+          <span class="location-notice-sub">One measurement point only; not representative of Starlink performance elsewhere.</span>
+        </span>
+      </p>
+    </div>
+
+    <!-- A + B. Measurement Overview -->
+    <section id="overview" class="section" aria-labelledby="overview-title">
+      <div class="container">
+        <h2 id="overview-title" class="section-title">Measurement Overview</h2>
+
+        <div class="metric-grid">
+          <article class="metric-card" data-metric="rtt_ms">
+            <h3 class="metric-name">Latency <abbr title="Round-Trip Time">(RTT)</abbr></h3>
+            <p class="metric-value"><span class="value" data-value>--</span><span class="unit">ms</span></p>
+            <p class="metric-help">Round-trip delay. Lower is better.</p>
+            <p class="metric-state" data-state>No data available</p>
+          </article>
+
+          <article class="metric-card" data-metric="download_mbps">
+            <h3 class="metric-name">Download Speed</h3>
+            <p class="metric-value"><span class="value" data-value>--</span><span class="unit">Mbps</span></p>
+            <p class="metric-help">Data received per second.</p>
+            <p class="metric-state" data-state>No data available</p>
+          </article>
+
+          <article class="metric-card" data-metric="upload_mbps">
+            <h3 class="metric-name">Upload Speed</h3>
+            <p class="metric-value"><span class="value" data-value>--</span><span class="unit">Mbps</span></p>
+            <p class="metric-help">Data sent per second.</p>
+            <p class="metric-state" data-state>No data available</p>
+          </article>
+
+          <article class="metric-card" data-metric="packet_loss_pct">
+            <h3 class="metric-name">Packet Loss</h3>
+            <p class="metric-value"><span class="value" data-value>--</span><span class="unit">%</span></p>
+            <p class="metric-help">Packets lost in transit. Lower is better.</p>
+            <p class="metric-state" data-state>No data available</p>
+          </article>
+        </div>
+
+        <!-- C. Measurement Status (compact strip) -->
+        <dl class="status-strip" aria-label="Measurement status">
+          <div class="status-item">
+            <dt>Status</dt>
+            <dd>
+              <span id="status-badge" class="status-badge" data-kind="pending">
+                <span class="status-symbol" aria-hidden="true">&#9675;</span>
+                <span id="status-text">Awaiting measurement data</span>
+              </span>
+            </dd>
+          </div>
+          <div class="status-item">
+            <dt>Last Updated</dt>
+            <dd id="last-updated">--</dd>
+          </div>
+          <div class="status-item">
+            <dt>Measurement Location</dt>
+            <dd>KAIST, Daejeon, South Korea</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- D. Network Performance History -->
+    <section id="history" class="section" aria-labelledby="history-title">
+      <div class="container">
+        <h2 id="history-title" class="section-title">Network Performance History</h2>
+
+        <div class="chart-panel">
+          <div class="chart-toolbar">
+            <div class="segmented" role="group" aria-label="Metric shown in chart">
+              <button type="button" class="seg-btn" data-chart-metric="rtt" aria-pressed="true">Latency (RTT)</button>
+              <button type="button" class="seg-btn" data-chart-metric="throughput" aria-pressed="false">Throughput</button>
+              <button type="button" class="seg-btn" data-chart-metric="loss" aria-pressed="false">Packet Loss</button>
+            </div>
+            <div class="segmented" role="group" aria-label="Time range" aria-describedby="range-note">
+              <button type="button" class="seg-btn" data-range="24h" aria-pressed="true" disabled>24 hours</button>
+              <button type="button" class="seg-btn" data-range="7d" aria-pressed="false" disabled>7 days</button>
+              <button type="button" class="seg-btn" data-range="30d" aria-pressed="false" disabled>30 days</button>
+            </div>
+          </div>
+
+          <div class="chart-head">
+            <h3 id="chart-title" class="chart-title">Latency (RTT)</h3>
+            <span id="chart-unit" class="chart-unit">Unit: ms</span>
+            <ul id="chart-legend" class="chart-legend" hidden></ul>
+          </div>
+
+          <div id="chart-area" class="chart-area" aria-live="polite">
+            <p class="chart-empty">Awaiting measurement data</p>
+          </div>
+
+          <p id="range-note" class="chart-note">Time range options activate once measurement data is connected. Times in KST (UTC+9).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- E. Setup photo -->
+    <section id="setup" class="section" aria-labelledby="setup-title">
+      <div class="container setup-layout">
+        <div class="setup-text">
+          <h2 id="setup-title" class="section-title">Our Starlink Setup at KAIST</h2>
+          <p>All data on this page comes from one Starlink connection on the KAIST campus.</p>
+        </div>
+        <!--
+          HOW TO ADD THE SETUP PHOTO
+          1. Save the photo as assets/setup.jpg (any landscape photo works;
+             it is cropped to 16:9 with object-fit: cover).
+          2. Set data-photo-src below to "assets/setup.jpg"
+             (relative path, no leading slash).
+          3. Replace data-photo-alt with a short description of the photo.
+          js/app.js swaps the placeholder for the image. If the file cannot be
+          loaded, the "Photo coming soon" placeholder stays visible.
+        -->
+        <figure class="setup-photo" id="setup-photo" data-photo-src="" data-photo-alt="Starlink equipment used for measurements at KAIST">
+          <div class="photo-frame">
+            <div class="photo-placeholder">
+              <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 5h3l2-2h6l2 2h3a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm8 3.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>
+              <span>Photo coming soon</span>
+            </div>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- F. About -->
+    <section id="about" class="section" aria-labelledby="about-title">
+      <div class="container about">
+        <h2 id="about-title" class="section-title">About the Measurement</h2>
+        <p>This project measures Starlink satellite internet performance at a single site on the KAIST campus in Daejeon, South Korea. It will publish latency, throughput (download and upload speed), and packet loss, and show how they change over time.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <ul class="footer-meta">
+        <li>Project: KAIST–ACAI Starlink Monitor</li>
+        <li>Measurement Location: KAIST, Daejeon, South Korea</li>
+      </ul>
+      <ul class="footer-meta">
+        <li>AI-assisted development with Claude &amp; GPT</li>
+        <li>Design inspired by <a href="https://speed.cloudflare.com/" rel="noopener" target="_blank">Cloudflare Speed Test</a>.</li>
+        <li>Independent research project · Not affiliated with Cloudflare or Starlink</li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
