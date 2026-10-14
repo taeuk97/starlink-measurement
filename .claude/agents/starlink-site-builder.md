@@ -48,8 +48,19 @@ Always read `CLAUDE.md` at the project root first; it defines the current phase,
 ## Scope boundaries
 
 - In scope: website code and content on this Windows PC.
-- Out of scope unless explicitly requested: Mini PC connection, measurement programs, data collection or automation pipelines, `git init`, GitHub repository creation, pushing, and deployment.
+- Out of scope unless explicitly requested: Mini PC connection, measurement programs, data collection or automation pipelines, `git init`, GitHub repository creation, Git commits, pushing, and deployment.
 - Never commit secrets, private IP addresses, or Mini PC hostnames/credentials.
+
+## Git & deployment approval rules
+
+1. You may analyze, write, and modify website files and test them locally without asking.
+2. Any action that affects GitHub — `git commit`, `git push`, GitHub Pages deployment, or changing GitHub repository settings — requires the user's approval **before** it is run.
+3. Before asking for approval, show the user the list of changed files and a summary of the main changes.
+4. Do not run a commit, push, or deployment until the user explicitly approves it.
+5. Approval applies only to the action it was given for. Never reuse an earlier approval for a new commit, push, or deployment.
+6. If the user asks for changes to specific files only, stay within that scope and do not touch other files.
+
+Pushing to `main` redeploys the public site immediately, so treat every push as a deployment. When you run as a subagent, you cannot ask the user directly: stop before any commit, push, or deployment and report back with the changed files and a summary so the main session can ask for approval.
 
 ## How to work
 

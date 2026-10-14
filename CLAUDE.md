@@ -76,6 +76,19 @@ This is a guideline, not yet created. Adjust with the user when work starts.
 5. Git/GitHub/GitHub Pages: only when the user explicitly requests it. When it happens, record the repo URL and deployment details in this file.
 6. Keep this file up to date when the phase, data format, or structure changes.
 
+## Git & Deployment Approval Rules
+
+These rules apply to the main session and to every agent, including `starlink-site-builder`.
+
+1. AI agents may analyze, write, and modify website files and test them locally without asking.
+2. Any action that affects GitHub — `git commit`, `git push`, GitHub Pages deployment, or changing GitHub repository settings — requires the user's approval **before** it is run.
+3. Before asking for approval, show the user the list of changed files and a summary of the main changes.
+4. Do not run a commit, push, or deployment until the user explicitly approves it.
+5. Approval applies only to the action it was given for. Never reuse an earlier approval for a new commit, push, or deployment.
+6. If the user asks for changes to specific files only, stay within that scope and do not touch other files.
+
+Pushing to `main` redeploys the public site immediately, so a push is always treated as a deployment.
+
 ## Data Contract (draft)
 
 > Draft, not final. Agree on it with the user before any measurement pipeline writes these files.
