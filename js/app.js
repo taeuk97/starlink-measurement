@@ -1,16 +1,19 @@
 /*
  * KAIST–ACAI Starlink Monitor — dashboard logic
  *
- * Loads data/latest.json and data/history.json (see "Data Contract (draft)"
- * in CLAUDE.md). Any missing file, fetch failure (e.g. opening the page via
- * file://), invalid JSON, or null value falls back to the empty states that
- * are already in index.html. This file never invents values.
+ * Shared by every dashboard page (index.html = Starlink, terrestrial.html =
+ * terrestrial baseline). Each page picks its data files with attributes on
+ * <body>: data-latest="..." and data-history="..." (relative paths). Without
+ * them it loads data/latest.json and data/history.json (see "Data Contract
+ * (draft)" in CLAUDE.md). Any missing file, fetch failure (e.g. opening the
+ * page via file://), invalid JSON, or null value falls back to the empty
+ * states that are already in the HTML. This file never invents values.
  */
 (function () {
   "use strict";
 
-  var DATA_LATEST = "data/latest.json";
-  var DATA_HISTORY = "data/history.json";
+  var DATA_LATEST = document.body.getAttribute("data-latest") || "data/latest.json";
+  var DATA_HISTORY = document.body.getAttribute("data-history") || "data/history.json";
   var STALE_AFTER_HOURS = 3; // older measurements are flagged as outdated
 
   var RANGES = { "24h": 24, "7d": 24 * 7, "30d": 24 * 30 }; // hours

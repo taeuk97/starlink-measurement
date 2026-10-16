@@ -35,6 +35,7 @@ Metrics the site is expected to show in the future:
 - The first version of the dashboard (`index.html`, `css/`, `js/`, `data/`, `assets/`) was approved by the user and committed. It shows empty states only; no measurement data exists yet.
 - Git is connected: branch `main`, remote `origin` = https://github.com/taeuk97/starlink-measurement.git.
 - **GitHub Pages:** live at https://taeuk97.github.io/starlink-measurement/ — source "Deploy from a branch", `main` / `(root)`, built by GitHub's default "pages build and deployment" workflow (first deployed 2026-10-12). Every push to `main` redeploys the public site.
+- **Pages:** `index.html` = Starlink dashboard; `terrestrial.html` = terrestrial (wired/ground) network baseline dashboard with the same layout. A "Starlink | Terrestrial" tab nav in the header (current page marked with `aria-current="page"`) links the two. Both pages share `css/style.css` and `js/app.js`; each page selects its data files via `data-latest` / `data-history` attributes on `<body>` (defaults: `data/latest.json`, `data/history.json`).
 - `.claude/settings.local.json` is machine-local and must not be committed.
 - Local preview: `.claude/launch.json` config `static-site` (`python -m http.server 8000`).
 - Do not commit, push, or deploy unless the user explicitly asks.
@@ -53,19 +54,23 @@ Metrics the site is expected to show in the future:
 - **Honesty of data:** Always show the measurement timestamp and data source context next to values. Show stale/missing data states clearly.
 - **Code style:** Small, readable files; relative paths only (GitHub Pages friendly); no secrets or private IPs/hostnames of the Mini PC in the repo.
 
-## Suggested Structure (when website work begins)
+## Structure
 
 ```
 /
-├── index.html          # Main dashboard
-├── css/                # Stylesheets
-├── js/                 # Dashboard logic & chart rendering
+├── index.html          # Starlink dashboard
+├── terrestrial.html    # Terrestrial (wired/ground) network baseline dashboard
+├── css/style.css       # Shared stylesheet
+├── js/app.js           # Shared dashboard logic (data paths set per page on <body>)
 ├── data/               # Measurement data files (only real data)
+│   ├── latest.json     # Starlink
+│   ├── history.json    # Starlink
+│   └── terrestrial/
+│       ├── latest.json
+│       └── history.json
 ├── assets/             # Icons/images (minimal)
 └── CLAUDE.md
 ```
-
-This is a guideline, not yet created. Adjust with the user when work starts.
 
 ## Working Rules for Future Tasks
 
@@ -93,7 +98,14 @@ Pushing to `main` redeploys the public site immediately, so a push is always tre
 
 > Draft, not final. Agree on it with the user before any measurement pipeline writes these files.
 
-The site reads two static JSON files with relative paths. If a file is missing, cannot be fetched (e.g. when the page is opened via `file://`), is invalid, or has `null` values, the site shows its empty states. Files in `data/` must contain **real measurements only**. The placeholder files ship with `null`s and empty arrays and contain no numbers.
+Each dashboard page reads two static JSON files with relative paths:
+
+| Page | Network | Latest | History |
+|------|---------|--------|---------|
+| `index.html` | Starlink | `data/latest.json` | `data/history.json` |
+| `terrestrial.html` | Terrestrial (wired/ground) baseline | `data/terrestrial/latest.json` | `data/terrestrial/history.json` |
+
+Both networks use exactly the same schema (below); the sections for `data/latest.json` and `data/history.json` apply equally to the files in `data/terrestrial/`. If a file is missing, cannot be fetched (e.g. when the page is opened via `file://`), is invalid, or has `null` values, the site shows its empty states. Files in `data/` must contain **real measurements only**. The placeholder files ship with `null`s and empty arrays and contain no numbers.
 
 General rules:
 - Timestamps are ISO 8601 in UTC with a `Z` suffix, e.g. `2026-10-12T14:00:00Z`. The UI displays them in KST and UTC.
